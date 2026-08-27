@@ -26,9 +26,74 @@ limitations under the License.
     </xacro:unless>
   </xacro:macro>
 
+  <!-- Emit every non-root body link and its connection. -->
+  <xacro:macro name="openarm_v20_emit_body_links"
+    params="index topology link_name_map joint_prefix inertials visuals collisions reflect_x:=1 reflect_y:=1 reflect_z:=1 reflect_include_links:=^">
+
+    <xacro:if value="${index &lt; len(topology['links'])}">
+      <xacro:property name="source_link_name" value="${topology['links'][index]}" lazy_eval="false" />
+      <xacro:property
+        name="incoming_joint_names"
+        value="${[name for name in topology['joints'] if topology['joints'][name]['child'] == source_link_name]}"
+        lazy_eval="false" />
+
+      <xacro:openarm_v20_require
+        condition="${len(incoming_joint_names) == 1}"
+        message="${'Invalid body topology: link `%s` must have exactly one incoming joint.' % source_link_name}" />
+
+      <xacro:property name="source_joint_name" value="${incoming_joint_names[0]}" lazy_eval="false" />
+      <xacro:property name="joint_cfg" value="${topology['joints'][source_joint_name]}" lazy_eval="false" />
+      <xacro:property name="link_reflects" value="${source_link_name in reflect_include_links}" lazy_eval="false" />
+
+      <xacro:openarm_v20_require
+        condition="${joint_cfg['parent'] in link_name_map}"
+        message="${'Invalid body topology: joint `%s` references unknown parent `%s`.' % (source_joint_name, joint_cfg['parent'])}" />
+
+      <xacro:openarm_v20_emit_link
+        link_name="${link_name_map[source_link_name]}"
+        source_name="${source_link_name}"
+        inertials="${inertials}"
+        visuals="${visuals}"
+        collisions="${collisions}"
+        reflect_x="${reflect_x if link_reflects else 1}"
+        reflect_y="${reflect_y if link_reflects else 1}"
+        reflect_z="${reflect_z if link_reflects else 1}" />
+
+      <xacro:openarm_v20_emit_joint
+        joint_name="${joint_prefix}${source_joint_name}"
+        joint_type="${joint_cfg['type']}"
+        parent_link="${link_name_map[joint_cfg['parent']]}"
+        child_link="${link_name_map[source_link_name]}"
+        joint_origins="${dict()}"
+        joint_axes="${dict()}"
+        joint_limits="${dict()}"
+        source_name="${source_joint_name}"
+        origin_override="${joint_cfg['origin']}"
+        axis_override="${joint_cfg['axis'] if 'axis' in joint_cfg else 'none'}"
+        limit_override="${joint_cfg['limit'] if 'limit' in joint_cfg else 'none'}"
+        dynamics_override="${joint_cfg['dynamics'] if 'dynamics' in joint_cfg else 'none'}"
+        reflect_x="${reflect_x}"
+        reflect_y="${reflect_y}"
+        reflect_z="${reflect_z}" />
+
+      <xacro:openarm_v20_emit_body_links
+        index="${index + 1}"
+        topology="${topology}"
+        link_name_map="${link_name_map}"
+        joint_prefix="${joint_prefix}"
+        inertials="${inertials}"
+        visuals="${visuals}"
+        collisions="${collisions}"
+        reflect_x="${reflect_x}"
+        reflect_y="${reflect_y}"
+        reflect_z="${reflect_z}"
+        reflect_include_links="${reflect_include_links}" />
+    </xacro:if>
+  </xacro:macro>
+
   <!-- Emit the body component through the same mount contract used by other component types. -->
   <xacro:macro name="openarm_v20_body"
-    params="link_name connected_to mount_origin topology inertials visuals collisions reflect_x:=1 reflect_y:=1 reflect_z:=1 reflect_include_links:=^ skip_mount_joint:=false base_frame_shift:=none">
+    params="link_name connected_to mount_origin topology link_name_map link_prefix inertials visuals collisions reflect_x:=1 reflect_y:=1 reflect_z:=1 reflect_include_links:=^ skip_mount_joint:=false base_frame_shift:=none">
 
     <xacro:property name="base_link_name" value="${topology['links'][0]}" lazy_eval="false" />
     <xacro:property name="resolved_base_frame_shift" value="${base_frame_shift if base_frame_shift != 'none' else 'none'}" lazy_eval="false" />
@@ -52,6 +117,19 @@ limitations under the License.
         <child link="${link_name}" />
       </joint>
     </xacro:unless>
+
+    <xacro:openarm_v20_emit_body_links
+      index="1"
+      topology="${topology}"
+      link_name_map="${link_name_map}"
+      joint_prefix="${link_prefix}"
+      inertials="${inertials}"
+      visuals="${visuals}"
+      collisions="${collisions}"
+      reflect_x="${reflect_x}"
+      reflect_y="${reflect_y}"
+      reflect_z="${reflect_z}"
+      reflect_include_links="${reflect_include_links}" />
   </xacro:macro>
 
   <!-- Load static resources and normalize product-specific preset data. -->
@@ -95,7 +173,7 @@ limitations under the License.
 
     <xacro:unless value="${source_type == 'sensor'}">
       <xacro:if value="${source_type == 'robot'}">
-        <xacro:property name="component_type" value="${component_config}" lazy_eval="false" />
+        <xacro:property name="component_type" value="${'body' if component_config == 'body_linear_axis' else component_config}" lazy_eval="false" />
         <xacro:property name="component_cfg_root" value="${config_root + '/' + component_config}" lazy_eval="false" />
       </xacro:if>
       <xacro:if value="${source_type == 'end_effector'}">
@@ -116,9 +194,12 @@ limitations under the License.
       <xacro:property name="component_inertials" value="${xacro.load_yaml(component_cfg_root + '/inertials/' + component_cfg['inertials'] + '.yaml')}" lazy_eval="false" />
       <xacro:property name="component_visuals" value="${xacro.load_yaml(component_cfg_root + '/link/visuals.yaml')}" lazy_eval="false" />
       <xacro:property name="component_collisions" value="${xacro.load_yaml(component_cfg_root + '/link/collisions.yaml')}" lazy_eval="false" />
-      <xacro:property name="component_link_name_map" value="${dict(body_link0=component_cfg['link_name']) if component_type == 'body' else empty_dict}" lazy_eval="false" />
+      <xacro:property
+        name="component_link_name_map"
+        value="${dict([(source_link, component_cfg['link_name'] if source_link == component_topology['links'][0] else component_link_prefix + source_link) for source_link in component_topology['links']]) if component_type == 'body' else empty_dict}"
+        lazy_eval="false" />
       <xacro:property name="component_root_link_actual" value="${component_cfg['link_name'] if component_type == 'body' else (component_link_prefix + component_topology['links'][0])}" lazy_eval="false" />
-      <xacro:property name="component_default_mount_parent" value="${component_cfg['link_name'] if component_type == 'body' else (component_link_prefix + component_topology['links'][-1])}" lazy_eval="false" />
+      <xacro:property name="component_default_mount_parent" value="${component_link_name_map[component_topology['links'][-1]] if component_type == 'body' else (component_link_prefix + component_topology['links'][-1])}" lazy_eval="false" />
       <xacro:property name="component_supports_tip_collapse" value="${component_type == 'arm'}" lazy_eval="false" />
 
       <xacro:property
@@ -215,7 +296,7 @@ limitations under the License.
           condition="${component_cfg['product'] == 'openarm_v2.0'}"
           message="${'Invalid robot preset: robot component `%s` uses unsupported product `%s`.' % (component_name, component_cfg['product'])}" />
         <xacro:openarm_v20_require
-          condition="${component_config in ['body', 'arm']}"
+          condition="${component_config in ['body', 'body_linear_axis', 'arm']}"
           message="${'Invalid robot preset: robot component `%s` has unsupported config `%s`.' % (component_name, component_config)}" />
       </xacro:if>
       <xacro:if value="${component_type == 'sensor'}">
@@ -432,6 +513,8 @@ limitations under the License.
         connected_to="${component_runtime['resolved_connected_to']}"
         mount_origin="${component_runtime['resolved_mount_origin']}"
         topology="${component_desc['topology']}"
+        link_name_map="${component_desc['link_name_map']}"
+        link_prefix="${component_desc['link_prefix']}"
         inertials="${component_desc['inertials']}"
         visuals="${component_desc['visuals']}"
         collisions="${component_desc['collisions']}"

@@ -12,16 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-body_link0:
+pedestal_link0:
   origin:
-    x: 0.0
+    x: 0.095
     y: 0.0
     z: 0.0
-    roll: 0.0
+    roll: 1.5707963267948966
     pitch: 0.0
-    yaw: 0.0
+    yaw: 1.5707963267948966
   geometry:
-    mesh: "package://openarm_description/assets/robot/openarm_v2.0/meshes/body/collision/body_link0_symp.stl"
+    mesh: "package://openarm_description/assets/robot/openarm_v2.0/meshes/body/collision/pedestal_link0_symp.stl"
+    scale:
+      x: 0.001
+      y: 0.001
+      z: 0.001
+
+chest_link0:
+  origin:
+    x: 0.095
+    y: 0.0
+    z: 0.0
+    roll: 1.5707963267948966
+    pitch: 0.0
+    yaw: 1.5707963267948966
+  geometry:
+    mesh: "package://openarm_description/assets/robot/openarm_v2.0/meshes/body/collision/chest_link0_symp.stl"
     scale:
       x: 0.001
       y: 0.001

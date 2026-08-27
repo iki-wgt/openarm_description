@@ -105,12 +105,17 @@ limitations under the License.
             <xacro:openarm_v20_emit_origin origin="${visual_cfg.origin}" reflect_x="${reflect_x}" reflect_y="${reflect_y}" reflect_z="${reflect_z}" />
           </xacro:unless>
           <geometry>
-            <mesh
-              filename="${visual_cfg.geometry.mesh}"
-              scale="${reflect_x * visual_cfg.geometry.scale.x} ${reflect_y * visual_cfg.geometry.scale.y} ${reflect_z * visual_cfg.geometry.scale.z}" />
+            <xacro:if value="${'mesh' in visual_cfg.geometry}">
+              <mesh
+                filename="${visual_cfg.geometry.mesh}"
+                scale="${reflect_x * visual_cfg.geometry.scale.x} ${reflect_y * visual_cfg.geometry.scale.y} ${reflect_z * visual_cfg.geometry.scale.z}" />
+            </xacro:if>
+            <xacro:if value="${'box' in visual_cfg.geometry}">
+              <box size="${visual_cfg.geometry.box.x} ${visual_cfg.geometry.box.y} ${visual_cfg.geometry.box.z}" />
+            </xacro:if>
           </geometry>
           <material name="${link_name}_material">
-            <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+            <color rgba="${visual_cfg.material.rgba if 'material' in visual_cfg else '0.752941176470588 0.752941176470588 0.752941176470588 1'}" />
           </material>
         </visual>
       </xacro:if>
@@ -125,9 +130,14 @@ limitations under the License.
             <xacro:openarm_v20_emit_origin origin="${collision_cfg.origin}" reflect_x="${reflect_x}" reflect_y="${reflect_y}" reflect_z="${reflect_z}" />
           </xacro:unless>
           <geometry>
-            <mesh
-              filename="${collision_cfg.geometry.mesh}"
-              scale="${reflect_x * collision_cfg.geometry.scale.x} ${reflect_y * collision_cfg.geometry.scale.y} ${reflect_z * collision_cfg.geometry.scale.z}" />
+            <xacro:if value="${'mesh' in collision_cfg.geometry}">
+              <mesh
+                filename="${collision_cfg.geometry.mesh}"
+                scale="${reflect_x * collision_cfg.geometry.scale.x} ${reflect_y * collision_cfg.geometry.scale.y} ${reflect_z * collision_cfg.geometry.scale.z}" />
+            </xacro:if>
+            <xacro:if value="${'box' in collision_cfg.geometry}">
+              <box size="${collision_cfg.geometry.box.x} ${collision_cfg.geometry.box.y} ${collision_cfg.geometry.box.z}" />
+            </xacro:if>
           </geometry>
         </collision>
       </xacro:if>
@@ -171,7 +181,7 @@ limitations under the License.
   </xacro:macro>
 
   <!-- Generic joint emitter with optional overrides for origin, axis, limits, and mimic. -->
-  <xacro:macro name="openarm_v20_emit_joint" params="joint_name joint_type parent_link child_link joint_origins joint_axes joint_limits reflect_x:=1 reflect_y:=1 reflect_z:=1 source_name:='' origin_override:=none axis_override:=none limit_override:=none mimic_override:=none mirror_limit_sign:=false frame_shift:=none">
+  <xacro:macro name="openarm_v20_emit_joint" params="joint_name joint_type parent_link child_link joint_origins joint_axes joint_limits reflect_x:=1 reflect_y:=1 reflect_z:=1 source_name:='' origin_override:=none axis_override:=none limit_override:=none mimic_override:=none dynamics_override:=none mirror_limit_sign:=false frame_shift:=none">
     <xacro:property name="source_joint_name" value="${source_name if source_name != '' else joint_name}" />
     <xacro:property name="joint_origin_cfg" value="${origin_override if origin_override != 'none' else joint_origins[source_joint_name].origin}" lazy_eval="false" />
     <joint name="${joint_name}" type="${joint_type}">
@@ -216,6 +226,12 @@ limitations under the License.
           joint="${mimic_override['joint']}"
           multiplier="${mimic_override['multiplier']}"
           offset="${mimic_override['offset']}" />
+      </xacro:if>
+
+      <xacro:if value="${joint_type != 'fixed' and dynamics_override != 'none'}">
+        <dynamics
+          damping="${dynamics_override['damping']}"
+          friction="${dynamics_override['friction']}" />
       </xacro:if>
     </joint>
   </xacro:macro>

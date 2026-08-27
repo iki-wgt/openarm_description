@@ -23,10 +23,12 @@ limitations under the License.
   <xacro:arg name="emit_grasp_frame" default="false" />
 
   <xacro:arg name="use_fake_hardware" default="true" />
+  <xacro:arg name="linear_axis_hardware_plugin" default="" />
 
   <xacro:property name="robot_root" value="$(find openarm_description)/assets/robot/openarm_v2.0" />
   <xacro:property name="config_root" value="${robot_root + '/config'}" />
   <xacro:property name="robot_preset_cfg" value="${xacro.load_yaml(config_root + '/robot_presets/' + '$(arg robot_preset)' + '.yaml')}" />
+  <xacro:property name="uses_linear_axis" value="${robot_preset_cfg['body']['config'] == 'body_linear_axis'}" />
 
   <xacro:openarm_v20_robot
     config_root="${config_root}"
@@ -49,5 +51,11 @@ limitations under the License.
     right_arm_prefix="right_"
     left_finger_mimic_multiplier="${pinch_finger_mimic_multiplier}"
     right_finger_mimic_multiplier="${pinch_finger_mimic_multiplier}" />
+
+  <xacro:if value="${uses_linear_axis}">
+    <xacro:openarm_linear_axis_ros2_control
+      use_fake_hardware="$(arg use_fake_hardware)"
+      linear_axis_hardware_plugin="$(arg linear_axis_hardware_plugin)" />
+  </xacro:if>
 
 </robot>

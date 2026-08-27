@@ -27,6 +27,7 @@ body:
   product: openarm_v2.0
   config: body
   inertials: nominal
+  prefix: openarm_
   link_name: openarm_body_link0
   connection:
     parent: world

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 left_arm_mount_point:
-  parent: body_link0
+  parent: chest_link0
   origin:
     x: 0.0
     y: 0.031
@@ -28,14 +28,14 @@ left_arm_mount_point:
       canonical_name: null
       type: fixed
     parent_link:
-      original_name: body_link0
-      canonical_name: body_link0
+      original_name: chest_link0
+      canonical_name: chest_link0
     child_link:
       original_name: body_left_arm_mount_point
       canonical_name: null
 
 right_arm_mount_point:
-  parent: body_link0
+  parent: chest_link0
   origin:
     x: 0.0
     y: -0.031
@@ -50,8 +50,8 @@ right_arm_mount_point:
       canonical_name: null
       type: fixed
     parent_link:
-      original_name: body_link0
-      canonical_name: body_link0
+      original_name: chest_link0
+      canonical_name: chest_link0
     child_link:
       original_name: body_right_arm_mount_point
       canonical_name: null

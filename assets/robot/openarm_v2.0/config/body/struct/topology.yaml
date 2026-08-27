@@ -14,4 +14,28 @@
 
 links:
   - body_link0
-joints: {}
+  - pedestal_link0
+  - chest_link0
+joints:
+  body_pedestal_joint:
+    type: fixed
+    parent: body_link0
+    child: pedestal_link0
+    origin:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.0
+  pedestal_chest_joint:
+    type: fixed
+    parent: pedestal_link0
+    child: chest_link0
+    origin:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      roll: 0.0
+      pitch: 0.0
+      yaw: 0.0
