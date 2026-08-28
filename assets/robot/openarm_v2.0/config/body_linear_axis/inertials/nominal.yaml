@@ -1,24 +1,24 @@
 linear_axis_base_link:
-  origin: {x: 0.0, y: 0.0, z: 0.282, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   mass: 20.0
   inertia: {xx: 0.554, xy: 0.0, xz: 0.0, yy: 0.554, yz: 0.0, zz: 0.048}
 
 linear_axis_middle_link:
-  origin: {x: 0.0, y: 0.0, z: 0.114, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   mass: 5.0
   inertia: {xx: 0.041667, xy: 0.0, xz: 0.0, yy: 0.041667, yz: 0.0, zz: 0.008333}
 
 linear_axis_upper_link:
-  origin: {x: 0.0, y: 0.0, z: 0.414, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   mass: 4.0
   inertia: {xx: 0.032133, xy: 0.0, xz: 0.0, yy: 0.032133, yz: 0.0, zz: 0.004267}
 
 linear_axis_top_plate_link:
-  origin: {x: 0.0, y: 0.0, z: 0.574, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   mass: 0.5
   inertia: {xx: 0.000617, xy: 0.0, xz: 0.0, yy: 0.000617, yz: 0.0, zz: 0.001200}
 
 chest_link0:
-  origin: {x: 0.0, y: 0.0, z: 0.698, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.01, y: 0.0, z: 0.005, roll: 0.0, pitch: 0.0, yaw: 0.0}
   mass: 13.89
   inertia: {xx: 1.653, xy: 0.0, xz: 0.0, yy: 1.653, yz: 0.0, zz: 0.051}

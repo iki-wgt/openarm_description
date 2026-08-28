@@ -1,26 +1,26 @@
 linear_axis_base_link:
-  origin: {x: 0.0, y: 0.0, z: 0.282, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   geometry:
     box: {x: 0.12, y: 0.12, z: 0.564}
   material:
     rgba: "0.18 0.18 0.18 1.0"
 
 linear_axis_middle_link:
-  origin: {x: 0.0, y: 0.0, z: 0.114, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   geometry:
     box: {x: 0.10, y: 0.10, z: 0.30}
   material:
     rgba: "0.28 0.28 0.28 1.0"
 
 linear_axis_upper_link:
-  origin: {x: 0.0, y: 0.0, z: 0.414, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   geometry:
     box: {x: 0.08, y: 0.08, z: 0.30}
   material:
     rgba: "0.38 0.38 0.38 1.0"
 
 linear_axis_top_plate_link:
-  origin: {x: 0.0, y: 0.0, z: 0.574, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
   geometry:
     box: {x: 0.12, y: 0.12, z: 0.02}
   material:
@@ -28,9 +28,9 @@ linear_axis_top_plate_link:
 
 chest_link0:
   origin:
-    x: 0.095
+    x: 0.105
     y: 0.0
-    z: 0.0
+    z: -0.693
     roll: 1.5707963267948966
     pitch: 0.0
     yaw: 1.5707963267948966

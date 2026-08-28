@@ -71,6 +71,7 @@ limitations under the License.
         origin_override="${joint_cfg['origin']}"
         axis_override="${joint_cfg['axis'] if 'axis' in joint_cfg else 'none'}"
         limit_override="${joint_cfg['limit'] if 'limit' in joint_cfg else 'none'}"
+        mimic_override="${dict(joint=joint_prefix + joint_cfg['mimic']['joint'], multiplier=joint_cfg['mimic']['multiplier'], offset=joint_cfg['mimic']['offset']) if 'mimic' in joint_cfg else 'none'}"
         dynamics_override="${joint_cfg['dynamics'] if 'dynamics' in joint_cfg else 'none'}"
         reflect_x="${reflect_x}"
         reflect_y="${reflect_y}"

@@ -15,9 +15,9 @@
 left_arm_mount_point:
   parent: chest_link0
   origin:
-    x: 0.0
+    x: 0.01
     y: 0.031
-    z: 0.698
+    z: 0.005
     roll: 0.0
     pitch: 0.0
     yaw: 0.0
@@ -37,9 +37,9 @@ left_arm_mount_point:
 right_arm_mount_point:
   parent: chest_link0
   origin:
-    x: 0.0
+    x: 0.01
     y: -0.031
-    z: 0.698
+    z: 0.005
     roll: 0.0
     pitch: 0.0
     yaw: 0.0
