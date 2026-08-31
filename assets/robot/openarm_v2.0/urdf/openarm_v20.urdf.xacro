@@ -18,6 +18,8 @@ limitations under the License.
 
   <xacro:include filename="$(find openarm_description)/assets/robot/openarm_v2.0/urdf/ros2_control/openarm.bimanual.ros2_control.xacro" />
 
+  <xacro:include filename="$(find openarm_description)/assets/robot/openarm_v2.0/urdf/sensors/openarm_b0495_wrist_cameras.xacro" />
+
   <xacro:arg name="robot_preset" default="default_bimanual" />
   <xacro:arg name="collapse_internal_empty_links" default="true" />
   <xacro:arg name="emit_grasp_frame" default="false" />
@@ -35,6 +37,21 @@ limitations under the License.
     robot_preset="${robot_preset_cfg}"
     collapse_internal_empty_links="$(arg collapse_internal_empty_links)"
     emit_grasp_frame="$(arg emit_grasp_frame)" />
+
+  <!-- A B0495 is part of each native pinch gripper. Emit it only for
+       enabled pinch-gripper components so single-arm presets remain valid. -->
+  <xacro:property name="primary_ee_cfg" value="${robot_preset_cfg['primary_arm_end_effector']}" />
+  <xacro:property name="secondary_ee_cfg" value="${robot_preset_cfg['secondary_arm_end_effector']}" />
+  <xacro:if value="${primary_ee_cfg['enabled'] and primary_ee_cfg['product'] == 'pinch_gripper'}">
+    <xacro:openarm_b0495_wrist_camera
+      side="${'left' if primary_ee_cfg['reflect']['y'] == -1 else 'right'}"
+      prefix="${primary_ee_cfg['prefix']}" />
+  </xacro:if>
+  <xacro:if value="${secondary_ee_cfg['enabled'] and secondary_ee_cfg['product'] == 'pinch_gripper'}">
+    <xacro:openarm_b0495_wrist_camera
+      side="${'left' if secondary_ee_cfg['reflect']['y'] == -1 else 'right'}"
+      prefix="${secondary_ee_cfg['prefix']}" />
+  </xacro:if>
 
   <xacro:property name="gains_file" value="${config_root}/arm/control/control_gains.yaml" />
   <xacro:property name="gains_dict" value="${xacro.load_yaml(gains_file)}" />
