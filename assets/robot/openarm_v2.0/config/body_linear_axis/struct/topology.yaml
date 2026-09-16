@@ -1,5 +1,6 @@
 links:
   - body_link0
+  - linear_axis_foot_link
   - linear_axis_base_link
   - linear_axis_middle_link
   - linear_axis_upper_link
@@ -7,17 +8,24 @@ links:
   - chest_link0
 
 joints:
-  body_linear_axis_base_joint:
+  body_linear_axis_foot_joint:
     type: fixed
     parent: body_link0
+    child: linear_axis_foot_link
+    # The foot front face is 5 mm ahead of the 50 mm-deep column front face.
+    origin: {x: -0.058, y: 0.0, z: 0.023, roll: 0.0, pitch: 0.0, yaw: 0.0}
+
+  linear_axis_foot_base_joint:
+    type: fixed
+    parent: linear_axis_foot_link
     child: linear_axis_base_link
-    origin: {x: 0.0, y: 0.0, z: 0.282, roll: 0.0, pitch: 0.0, yaw: 0.0}
+    origin: {x: 0.058, y: 0.0, z: 0.285, roll: 0.0, pitch: 0.0, yaw: 0.0}
 
   linear_axis_joint:
     type: prismatic
     parent: linear_axis_base_link
     child: linear_axis_upper_link
-    origin: {x: 0.0, y: 0.0, z: 0.132, roll: 0.0, pitch: 0.0, yaw: 0.0}
+    origin: {x: 0.0, y: 0.0, z: 0.112, roll: 0.0, pitch: 0.0, yaw: 0.0}
     axis: {x: 0.0, y: 0.0, z: 1.0}
     limit:
       lower: 0.0
@@ -32,7 +40,7 @@ joints:
     type: prismatic
     parent: linear_axis_base_link
     child: linear_axis_middle_link
-    origin: {x: 0.0, y: 0.0, z: 0.132, roll: 0.0, pitch: 0.0, yaw: 0.0}
+    origin: {x: 0.0, y: 0.0, z: 0.112, roll: 0.0, pitch: 0.0, yaw: 0.0}
     axis: {x: 0.0, y: 0.0, z: 1.0}
     limit:
       lower: 0.0
@@ -51,10 +59,14 @@ joints:
     type: fixed
     parent: linear_axis_upper_link
     child: linear_axis_top_plate_link
-    origin: {x: 0.0, y: 0.0, z: 0.16, roll: 0.0, pitch: 0.0, yaw: 0.0}
+    # The link is the 60 x 60 mm, 150 mm high aluminium profile.  Its frame
+    # is at the profile centre, with its lower face flush to the axis top.
+    origin: {x: 0.0, y: 0.0, z: 0.225, roll: 0.0, pitch: 0.0, yaw: 0.0}
 
   linear_axis_top_plate_chest_joint:
     type: fixed
     parent: linear_axis_top_plate_link
     child: chest_link0
-    origin: {x: -0.01, y: 0.0, z: 0.09, roll: 0.0, pitch: 0.0, yaw: 0.0}
+    # Arm-base frames are 61 mm below the profile top.  The chest reference
+    # points add z=5 mm, hence this frame is 14 mm above the profile centre.
+    origin: {x: -0.01, y: 0.0, z: 0.009, roll: 0.0, pitch: 0.0, yaw: 0.0}
