@@ -1,0 +1,16 @@
+links:
+  - body_link0
+  - aluminium_profile_link
+  - chest_link0
+
+joints:
+  body_aluminium_profile_joint:
+    type: fixed
+    parent: body_link0
+    child: aluminium_profile_link
+    origin: {x: 0.0, y: 0.0, z: 0.075, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  aluminium_profile_chest_joint:
+    type: fixed
+    parent: aluminium_profile_link
+    child: chest_link0
+    origin: {x: -0.01, y: 0.0, z: 0.009, roll: 0.0, pitch: 0.0, yaw: 0.0}

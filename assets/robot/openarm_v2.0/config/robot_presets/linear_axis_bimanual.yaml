@@ -11,13 +11,13 @@ body:
   type: robot
   enabled: true
   product: openarm_v2.0
-  config: body_linear_axis
+  config: body_aluminium_profile
   inertials: nominal
   prefix: openarm_
   link_name: openarm_body_link0
   connection:
-    parent: world
-    origin: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
+    parent: openarm_linear_axis_upper_link
+    origin: {x: 0.0, y: 0.0, z: 0.15, roll: 0.0, pitch: 0.0, yaw: 0.0}
   reflect: {x: 1, y: 1, z: 1}
   limit_override_joints: {}
 

@@ -1,0 +1,4 @@
+chest_link0:
+  origin: {x: 0.01, y: 0.0, z: 0.005, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  mass: 13.89
+  inertia: {xx: 1.653, xy: 0.0, xz: 0.0, yy: 1.653, yz: 0.0, zz: 0.051}
