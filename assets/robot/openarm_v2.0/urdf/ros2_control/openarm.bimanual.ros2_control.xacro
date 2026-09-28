@@ -15,7 +15,7 @@ limitations under the License.
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <xacro:macro name="openarm_linear_axis_ros2_control"
-             params="use_fake_hardware linear_axis_hardware_plugin">
+             params="use_fake_hardware linear_axis_hardware_plugin linear_axis_serial_port:=^|/dev/ttyACM0">
   <ros2_control name="openarm_linear_axis_hardware_interface" type="system">
     <hardware>
       <xacro:if value="${use_fake_hardware}">
@@ -29,6 +29,14 @@ limitations under the License.
                           lazy_eval="false"/>
         </xacro:unless>
         <plugin>${linear_axis_hardware_plugin}</plugin>
+        <param name="serial_port">${linear_axis_serial_port}</param>
+        <param name="min_height_m">0.0</param>
+        <param name="max_height_m">0.6</param>
+        <param name="command_deadband_m">0.001</param>
+        <param name="state_limit_tolerance_m">0.01</param>
+        <param name="status_period_s">0.1</param>
+        <param name="status_timeout_s">0.8</param>
+        <param name="activation_timeout_s">1.5</param>
       </xacro:unless>
     </hardware>
     <joint name="openarm_linear_axis_joint">
